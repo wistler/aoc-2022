@@ -10,28 +10,53 @@ input_file = os.path.join(mydir, 'input')
 def log(message: str):
   print('{} | {}'.format(log_prefix, message))
 
+WINS = [
+  ('A','Y'), 
+  ('B','Z'), 
+  ('C','X')
+]
+
+DRAWS = [
+  ('A', 'X'),
+  ('B', 'Y'),
+  ('C', 'Z')
+]
+
+VALUE = {
+  'X': 1,
+  'Y': 2,
+  'Z': 3
+}
+
+WIN_SYMBOL = {
+  'A': 'Y',
+  'B': 'Z',
+  'C': 'X'
+}
+
+LOSE_SYMBOL = {
+  'A': 'Z',
+  'B': 'X',
+  'C': 'Y'
+}
+
+DRAW_SYMBOL = {
+  'A': 'X',
+  'B': 'Y',
+  'C': 'Z'
+}
 
 def part1(li: list):
-  totalCal = 0
-  maxCal = 0
-  for c in li:
-    if c == 0:
-      if maxCal < totalCal:
-        maxCal = totalCal
-      totalCal = 0
-    else:
-      totalCal += c
-      
-  # one last time
-  if maxCal < totalCal:
-    maxCal = totalCal
-  
-  return maxCal
+  score = 0
+  for pair in li:
+    round_score = VALUE[pair[1]] + (3 if pair in DRAWS else 6 if pair in WINS else 0)
+    score += round_score
+  return score
 
 
 def part1_tests():
   test_cases = [
-    ({"li":[1000, 2000, 3000, 0, 4000, 0, 5000, 6000, 0, 7000, 8000, 9000, 0, 10000]}, 2400),
+    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 15),
   ]
   for index, (inputs, expected) in enumerate(test_cases, start=1):
     actual = part1(**inputs)
@@ -41,25 +66,24 @@ def part1_tests():
 
 
 def part2(li: list):
-  totalCal = 0
-  totals = []
-  for c in li:
-    if c == 0:
-      totals.append(totalCal)
-      totalCal = 0
+  score = 0
+  for pair in li:
+    if pair[1] == 'X':
+      hand = LOSE_SYMBOL[pair[0]]
+      round_score = VALUE[hand]
+    elif pair[1] == 'Z':
+      hand = WIN_SYMBOL[pair[0]]
+      round_score = 6 + VALUE[hand]
     else:
-      totalCal += c
-  
-  if (totalCal > 0):
-    totals.append(totalCal)
-  
-  totals.sort(reverse=True)
-  return sum(totals[0:3])
+      hand = DRAW_SYMBOL[pair[0]]
+      round_score = 3 + VALUE[hand]
+    score += round_score
+  return score
 
 
 def part2_tests():
   test_cases = [
-    ({"li":[1000, 2000, 3000, 0, 4000, 0, 5000, 6000, 0, 7000, 8000, 9000, 0, 10000]}, 45000),
+    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 12),
   ]
   for index, (inputs, expected) in enumerate(test_cases, start=1):
     actual = part2(**inputs)
@@ -72,10 +96,8 @@ def Run():
   input = []
   with open(input_file) as fi:
     for line in fi.readlines():
-      try:
-        i = int(line)
-      except:
-        i = 0
+      [a,x] = line.split()
+      i = (a,x)
       input.append(i)
   
   global log_prefix
