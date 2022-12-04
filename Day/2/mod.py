@@ -47,6 +47,8 @@ DRAW_SYMBOL = {
 }
 
 def part1(li: list):
+  global log_prefix
+  log_prefix = "Part 1"
   score = 0
   for pair in li:
     round_score = VALUE[pair[1]] + (3 if pair in DRAWS else 6 if pair in WINS else 0)
@@ -54,18 +56,9 @@ def part1(li: list):
   return score
 
 
-def part1_tests():
-  test_cases = [
-    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 15),
-  ]
-  for index, (inputs, expected) in enumerate(test_cases, start=1):
-    actual = part1(**inputs)
-    if actual != expected:
-      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
-      sys.exit(1)
-
-
 def part2(li: list):
+  global log_prefix
+  log_prefix = "Part 2"
   score = 0
   for pair in li:
     if pair[1] == 'X':
@@ -81,6 +74,17 @@ def part2(li: list):
   return score
 
 
+def part1_tests():
+  test_cases = [
+    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 15),
+  ]
+  for index, (inputs, expected) in enumerate(test_cases, start=1):
+    actual = part1(**inputs)
+    if actual != expected:
+      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
+      sys.exit(1)
+
+
 def part2_tests():
   test_cases = [
     ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 12),
@@ -93,12 +97,7 @@ def part2_tests():
 
 
 def Test():
-  global log_prefix
-  
-  log_prefix = "Part 1"
   part1_tests()
-  
-  log_prefix = "Part 2"
   part2_tests()
 
 
@@ -110,14 +109,7 @@ def Run():
       i = (a,x)
       input.append(i)
   
-  global log_prefix
-  log_prefix = "Part 1"
   log("Answer = {}".format(part1(input)))
   
-  log_prefix = "Part 2"
   log("Answer = {}".format(part2(input)))
-
-
-if __name__ == '__main__':
-  Run()
 

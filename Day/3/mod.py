@@ -19,6 +19,8 @@ def pri(c):
   return pri
 
 def part1(li: list):
+  global log_prefix
+  log_prefix = "Part 1"
   sum = 0
   for line in li:
     c1 = set(line[0:len(line)//2])
@@ -28,6 +30,25 @@ def part1(li: list):
     c = shared.pop()
     sum += pri(c)
   return sum
+
+
+def part2(li: list):
+  global log_prefix
+  log_prefix = "Part 2"
+  sum = 0
+  for i in range(0,len(li),3):
+    shared = set(li[i])
+    shared.intersection_update(li[i+1])
+    shared.intersection_update(li[i+2])
+    try:
+      assert(len(shared) == 1)
+    except:
+      print(shared, li[i], li[i+1], li[i+2])
+      exit(2)
+    c = shared.pop()
+    sum += pri(c)
+  return sum
+
 
 def part1_tests():
   test_cases = [
@@ -45,22 +66,6 @@ def part1_tests():
     if actual != expected:
       log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
       sys.exit(1)
-
-
-def part2(li: list):
-  sum = 0
-  for i in range(0,len(li),3):
-    shared = set(li[i])
-    shared.intersection_update(li[i+1])
-    shared.intersection_update(li[i+2])
-    try:
-      assert(len(shared) == 1)
-    except:
-      print(shared, li[i], li[i+1], li[i+2])
-      exit(2)
-    c = shared.pop()
-    sum += pri(c)
-  return sum
 
 
 def part2_tests():
@@ -82,12 +87,7 @@ def part2_tests():
 
 
 def Test():
-  global log_prefix
-  
-  log_prefix = "Part 1"
   part1_tests()
-  
-  log_prefix = "Part 2"
   part2_tests()
 
 
@@ -97,14 +97,7 @@ def Run():
     for line in fi.readlines():
       input.append(line.strip())
   
-  global log_prefix
-  log_prefix = "Part 1"
   log("Answer = {}".format(part1(input)))
   
-  log_prefix = "Part 2"
   log("Answer = {}".format(part2(input)))
-
-
-if __name__ == '__main__':
-  Run()
 
