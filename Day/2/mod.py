@@ -10,18 +10,6 @@ input_file = os.path.join(mydir, 'input')
 def log(message: str):
   print('{} | {}'.format(log_prefix, message))
 
-WINS = [
-  ('A','Y'), 
-  ('B','Z'), 
-  ('C','X')
-]
-
-DRAWS = [
-  ('A', 'X'),
-  ('B', 'Y'),
-  ('C', 'Z')
-]
-
 VALUE = {
   'X': 1,
   'Y': 2,
@@ -46,32 +34,31 @@ DRAW_SYMBOL = {
   'C': 'Z'
 }
 
+COND_MAP = {
+  'X': (0, LOSE_SYMBOL),
+  'Y': (3, DRAW_SYMBOL),
+  'Z': (6, WIN_SYMBOL),
+}
+
 def part1(li: list):
   global log_prefix
   log_prefix = "Part 1"
-  score = 0
-  for pair in li:
-    round_score = VALUE[pair[1]] + (3 if pair in DRAWS else 6 if pair in WINS else 0)
-    score += round_score
-  return score
+  scores = []
+  for them,me in li:
+    points = (3 if DRAW_SYMBOL[them] == me else 6 if WIN_SYMBOL[them] == me else 0)
+    scores.append(points + VALUE[me])
+  return sum(scores)
 
 
 def part2(li: list):
   global log_prefix
   log_prefix = "Part 2"
-  score = 0
-  for pair in li:
-    if pair[1] == 'X':
-      hand = LOSE_SYMBOL[pair[0]]
-      round_score = VALUE[hand]
-    elif pair[1] == 'Z':
-      hand = WIN_SYMBOL[pair[0]]
-      round_score = 6 + VALUE[hand]
-    else:
-      hand = DRAW_SYMBOL[pair[0]]
-      round_score = 3 + VALUE[hand]
-    score += round_score
-  return score
+  scores = []
+  for them,cond in li:
+    points, sym_map = COND_MAP[cond]
+    me = sym_map[them]
+    scores.append( points + VALUE[me] )
+  return sum(scores)
 
 
 def part1_tests():
@@ -105,9 +92,7 @@ def Run():
   input = []
   with open(input_file) as fi:
     for line in fi.readlines():
-      [a,x] = line.split()
-      i = (a,x)
-      input.append(i)
+      input.append( tuple(line.split()) )
   
   log("Answer = {}".format(part1(input)))
   
