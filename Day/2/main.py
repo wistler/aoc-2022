@@ -92,6 +92,16 @@ def part2_tests():
       sys.exit(1)
 
 
+def Test():
+  global log_prefix
+  
+  log_prefix = "Part 1"
+  part1_tests()
+  
+  log_prefix = "Part 2"
+  part2_tests()
+
+
 def Run():
   input = []
   with open(input_file) as fi:
@@ -102,11 +112,9 @@ def Run():
   
   global log_prefix
   log_prefix = "Part 1"
-  part1_tests()
   log("Answer = {}".format(part1(input)))
   
   log_prefix = "Part 2"
-  part2_tests()
   log("Answer = {}".format(part2(input)))
 
 

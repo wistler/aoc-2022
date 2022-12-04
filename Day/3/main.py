@@ -62,6 +62,7 @@ def part2(li: list):
     sum += pri(c)
   return sum
 
+
 def part2_tests():
   test_cases = [
     ({"li": [
@@ -79,6 +80,17 @@ def part2_tests():
       log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
       sys.exit(1)
 
+
+def Test():
+  global log_prefix
+  
+  log_prefix = "Part 1"
+  part1_tests()
+  
+  log_prefix = "Part 2"
+  part2_tests()
+
+
 def Run():
   input = []
   with open(input_file) as fi:
@@ -87,11 +99,9 @@ def Run():
   
   global log_prefix
   log_prefix = "Part 1"
-  part1_tests()
   log("Answer = {}".format(part1(input)))
   
   log_prefix = "Part 2"
-  part2_tests()
   log("Answer = {}".format(part2(input)))
 
 
