@@ -1,14 +1,10 @@
-import sys
 import os
 
+from lib.util import test
 
-global log_prefix
-log_prefix = ""
 mydir = os.path.dirname(os.path.realpath(__file__))
 input_file = os.path.join(mydir, 'input')
 
-def log(message: str):
-  print('{} | {}'.format(log_prefix, message))
 
 VALUE = {
   'X': 1,
@@ -40,9 +36,10 @@ COND_MAP = {
   'Z': (6, WIN_SYMBOL),
 }
 
+@test([
+  ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 15),
+])
 def part1(li: list):
-  global log_prefix
-  log_prefix = "Part 1"
   scores = []
   for them,me in li:
     points = (3 if DRAW_SYMBOL[them] == me else 6 if WIN_SYMBOL[them] == me else 0)
@@ -50,9 +47,10 @@ def part1(li: list):
   return sum(scores)
 
 
+@test([
+  ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 12),
+])
 def part2(li: list):
-  global log_prefix
-  log_prefix = "Part 2"
   scores = []
   for them,cond in li:
     points, sym_map = COND_MAP[cond]
@@ -61,40 +59,13 @@ def part2(li: list):
   return sum(scores)
 
 
-def part1_tests():
-  test_cases = [
-    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 15),
-  ]
-  for index, (inputs, expected) in enumerate(test_cases, start=1):
-    actual = part1(**inputs)
-    if actual != expected:
-      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
-      sys.exit(1)
-
-
-def part2_tests():
-  test_cases = [
-    ({"li": [('A','Y'), ('B','X'), ('C','Z')]}, 12),
-  ]
-  for index, (inputs, expected) in enumerate(test_cases, start=1):
-    actual = part2(**inputs)
-    if actual != expected:
-      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
-      sys.exit(1)
-
-
-def Test():
-  part1_tests()
-  part2_tests()
-
-
 def Run():
   input = []
   with open(input_file) as fi:
     for line in fi.readlines():
       input.append( tuple(line.split()) )
   
-  log("Answer = {}".format(part1(input)))
+  print("Part1 Answer = {}".format(part1(input)))
   
-  log("Answer = {}".format(part2(input)))
+  print("Part2 Answer = {}".format(part2(input)))
 

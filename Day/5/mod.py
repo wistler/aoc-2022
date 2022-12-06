@@ -1,14 +1,10 @@
-import sys
 import os
 
+from lib.util import test
 
-global log_prefix
-log_prefix = ""
+
 mydir = os.path.dirname(os.path.realpath(__file__))
 input_file = os.path.join(mydir, 'input')
-
-def log(message: str):
-  print('{} | {}'.format(log_prefix, message))
 
 
 def parse_input(text: list):
@@ -35,30 +31,8 @@ def parse_input(text: list):
   return stacks, instructions
 
 
-def part1(text: list):
-  global log_prefix
-  log_prefix = "Part 1"
-  stacks, steps = parse_input(text)
-  for n,x,y in steps:
-    for _ in range(0,n):
-      stacks[y-1].append(stacks[x-1].pop())
-  return ''.join([st[-1] for st in stacks])
-
-
-def part2(text: list):
-  global log_prefix
-  log_prefix = "Part 2"
-  stacks, steps = parse_input(text)
-  for n,x,y in steps:
-    stacks[x-1], move = stacks[x-1][:-n], stacks[x-1][-n:]
-    stacks[y-1].extend(move)
-    
-  return ''.join([st[-1] for st in stacks])
-
-
-def part1_tests():
-  test_cases = [
-    ({"text": [
+@test([
+  ({"text": [
       "    [D]    ",
       "[N] [C]    ",
       "[Z] [M] [P]",
@@ -69,17 +43,17 @@ def part1_tests():
       "move 2 from 2 to 1",
       "move 1 from 1 to 2",
   ]}, "CMZ"),
-  ]
-  for index, (inputs, expected) in enumerate(test_cases, start=1):
-    actual = part1(**inputs)
-    if actual != expected:
-      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
-      sys.exit(1)
+])
+def part1(text: list):
+  stacks, steps = parse_input(text)
+  for n,x,y in steps:
+    for _ in range(0,n):
+      stacks[y-1].append(stacks[x-1].pop())
+  return ''.join([st[-1] for st in stacks])
 
 
-def part2_tests():
-  test_cases = [
-    ({"text": [
+@test([
+  ({"text": [
       "    [D]    ",
       "[N] [C]    ",
       "[Z] [M] [P]",
@@ -90,17 +64,14 @@ def part2_tests():
       "move 2 from 2 to 1",
       "move 1 from 1 to 2",
   ]}, "MCD"),
-  ]
-  for index, (inputs, expected) in enumerate(test_cases, start=1):
-    actual = part2(**inputs)
-    if actual != expected:
-      log("Test case #{}, Actual = {}. Expected = {}".format(index, actual, expected))
-      sys.exit(1)
-
-
-def Test():
-  part1_tests()
-  part2_tests()
+])
+def part2(text: list):
+  stacks, steps = parse_input(text)
+  for n,x,y in steps:
+    stacks[x-1], move = stacks[x-1][:-n], stacks[x-1][-n:]
+    stacks[y-1].extend(move)
+    
+  return ''.join([st[-1] for st in stacks])
 
 
 def Run():
@@ -109,7 +80,7 @@ def Run():
     for line in fi.readlines():
       input.append( line )
   
-  log("Answer = {}".format(part1(input)))
+  print("Part1 Answer = {}".format(part1(input)))
   
-  log("Answer = {}".format(part2(input)))
+  print("Part2 Answer = {}".format(part2(input)))
 

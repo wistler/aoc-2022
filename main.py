@@ -9,7 +9,5 @@ if __name__ == '__main__':
   mod_name = 'Day.{}.mod'.format(day)
   
   mod = importlib.import_module(mod_name)
-  print('Testing Module: {}'.format(mod_name))
-  mod.Test()
   print('Running Module: {}'.format(mod_name))
   mod.Run()
