@@ -1,7 +1,7 @@
 import os
 
 from lib.util import test
-from lib.coord import Coord
+
 
 mydir = os.path.dirname(os.path.realpath(__file__))
 input_file = os.path.join(mydir, 'input')
